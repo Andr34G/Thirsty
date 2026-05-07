@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thirst</title>
+  <link rel="stylesheet" href="Assets/resprite-font.css" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .page-title {
+      max-width: min(80vw, 700px);
+      height: auto;
+      display: block;
+    }
+
+    .sprite {
+      width: min(30vw, 180px);
+      aspect-ratio: 1 / 1;
+      background-image: url("Assets/Pink_01.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      image-rendering: pixelated;
+    }
+
+    .start-button {
+      max-width: min(40vw, 260px);
+      height: auto;
+      display: block;
+      cursor: pointer;
+      margin-top: -40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <img class="page-title" src="Assets/Thirst.png" alt="Thirst" />
+    <div class="sprite" aria-label="Animated sprite"></div>
+    <a href="thirsty.html" aria-label="Go to Thirsty page">
+      <img class="start-button" src="Assets/startbutton.png" alt="Start" />
+    </a>
+  </div>
+  <script src="Assets/resprite-font.js"></script>
+  <script>
+    const sprite = document.querySelector(".sprite");
+    const spriteSheet = new Image();
+    spriteSheet.src = "Assets/Pink_01.png";
+
+    spriteSheet.onload = () => {
+      const frameSize = spriteSheet.naturalHeight;
+      const frameCount = Math.max(1, Math.round(spriteSheet.naturalWidth / frameSize));
+      let currentFrame = 0;
+
+      sprite.style.backgroundSize = `${frameCount * 100}% 100%`;
+
+      const renderFrame = () => {
+        const xOffset = (currentFrame * 100) / Math.max(1, frameCount - 1);
+        sprite.style.backgroundPosition = `${xOffset}% 0`;
+      };
+
+      renderFrame();
+      setInterval(() => {
+        currentFrame = (currentFrame + 1) % frameCount;
+        renderFrame();
+      }, 700);
+    };
+  </script>
+</body>
+</html>

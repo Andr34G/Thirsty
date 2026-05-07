@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fridge</title>
+  <link rel="stylesheet" href="Assets/resprite-font.css" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 22px;
+      background: #000;
+    }
+
+    .page-heading {
+      margin: 0;
+      --resprite-size: clamp(28px, 5vw, 56px);
+      --resprite-gap: -1px;
+      --resprite-space-width: 10px;
+    }
+
+    .fridge-shelf-drinks {
+      width: min(96vw, 1200px);
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      gap: 2vw;
+    }
+
+    .fridge-shelf-drinks a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .milk-link {
+      margin-right: -3vw;
+    }
+
+    .fridge-drink {
+      width: min(20vw, 240px);
+      height: auto;
+      image-rendering: pixelated;
+      display: block;
+      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.55));
+      transition: transform 160ms ease, filter 160ms ease;
+      transform-origin: bottom center;
+    }
+
+    .fridge-drink--milk {
+      width: min(23vw, 280px);
+    }
+
+    .fridge-drink:hover {
+      transform: scale(1.18);
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+    }
+
+    .caption {
+      margin: 0;
+      width: min(92vw, 1100px);
+      --resprite-size: clamp(14px, 2.2vw, 26px);
+      --resprite-gap: -1px;
+      --resprite-space-width: 12px;
+    }
+
+    .caption.resprite-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="page-heading" data-resprite data-resprite-text="hmmm"></h1>
+  <div class="fridge-shelf-drinks" aria-label="Drink selection">
+    <a class="milk-link" href="milk.html" aria-label="Choose milk">
+      <img class="fridge-drink fridge-drink--milk" src="Assets/drinks/Milk.png" alt="Milk" />
+    </a>
+    <a href="mysterycocktail.html" aria-label="Choose mystery cocktail">
+      <img class="fridge-drink" src="Assets/drinks/Cocktail.png" alt="Cocktail" />
+    </a>
+    <a href="mintmojito.html" aria-label="Choose mint mojito">
+      <img class="fridge-drink" src="Assets/drinks/Mint01.png" alt="Mint drink" />
+    </a>
+    <a href="martini.html" aria-label="Choose lychee martini">
+      <img class="fridge-drink" src="Assets/drinks/Lychee Martini.png" alt="Lychee martini" />
+    </a>
+    <a href="water.html" aria-label="Choose water">
+      <img class="fridge-drink" src="Assets/drinks/Photo 3.png" alt="Water bottle" />
+    </a>
+  </div>
+  <p class="caption" data-resprite data-resprite-text="evil beverages that give you flashbacks"></p>
+  <script src="Assets/resprite-font.js"></script>
+</body>
+</html>

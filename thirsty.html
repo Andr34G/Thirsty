@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thirsty</title>
+  <link rel="stylesheet" href="Assets/resprite-font.css" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #6f94bf;
+    }
+
+    .scene {
+      width: min(92vw, 860px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 14px;
+      margin: 40px auto 24px;
+    }
+
+    .sleep-sprite {
+      width: min(55vw, 320px);
+      aspect-ratio: 1 / 1;
+      background-image: url("Assets/Sleep.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      image-rendering: pixelated;
+    }
+
+    .typewriter-text {
+      margin: 0;
+      width: min(86vw, 760px);
+      text-align: center;
+      min-height: 140px;
+      --resprite-size: clamp(16px, 2.1vw, 24px);
+      --resprite-gap: -1px;
+      --resprite-space-width: 14px;
+    }
+
+    .typewriter-text.resprite-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 8px 0;
+    }
+
+    .resprite-word {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      align-items: flex-end;
+      gap: var(--resprite-gap);
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .resprite-word-gap {
+      width: var(--resprite-space-width);
+      height: var(--resprite-size);
+      flex: 0 0 auto;
+    }
+
+    .resprite-punctuation {
+      display: inline-flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: calc(var(--resprite-size) * 0.42);
+      height: var(--resprite-size);
+      color: #eaf3ff;
+      font-size: calc(var(--resprite-size) * 0.8);
+      line-height: 1;
+    }
+
+    .downstairs-button {
+      width: min(52vw, 320px);
+      height: auto;
+      display: block;
+      image-rendering: pixelated;
+      cursor: pointer;
+      margin-top: -50px;
+    }
+
+    .downstairs-link {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <main class="scene">
+    <h1 data-resprite data-resprite-text="THIRSTY" style="--resprite-size: min(12vw, 74px); margin: 0;"></h1>
+    <div class="sleep-sprite" aria-label="Sleep animation"></div>
+    <p id="intro-text" class="typewriter-text resprite-text" aria-live="polite"></p>
+    <a class="downstairs-link" href="downstairs.html" aria-label="Go downstairs">
+      <img class="downstairs-button" src="Assets/downstairs.png" alt="Downstairs" />
+    </a>
+  </main>
+
+  <script src="Assets/resprite-font.js"></script>
+  <script>
+    const sprite = document.querySelector(".sleep-sprite");
+    const sheet = new Image();
+    sheet.src = "Assets/Sleep.png";
+    const introText = document.querySelector("#intro-text");
+    const message = "You awake from your slumber. You are parched, maybe you should head downstairs for a drink";
+    let charIndex = 0;
+
+    const renderTypewriterResprite = (text) => {
+      introText.textContent = "";
+      introText.setAttribute("aria-label", text.trim());
+
+      const words = text.split(" ");
+      words.forEach((word, wordIndex) => {
+        const wordElement = document.createElement("span");
+        wordElement.className = "resprite-word";
+
+        for (const char of word.toUpperCase()) {
+          if (char >= "A" && char <= "Z") {
+            const letter = document.createElement("img");
+            letter.className = "resprite-letter";
+            letter.src = `Assets/resprite-font/${char}.png`;
+            letter.alt = "";
+            letter.setAttribute("aria-hidden", "true");
+            wordElement.appendChild(letter);
+            continue;
+          }
+
+          if (char.trim() !== "") {
+            const punctuation = document.createElement("span");
+            punctuation.className = "resprite-punctuation";
+            punctuation.textContent = char;
+            punctuation.setAttribute("aria-hidden", "true");
+            wordElement.appendChild(punctuation);
+          }
+        }
+
+        introText.appendChild(wordElement);
+
+        if (wordIndex < words.length - 1) {
+          const gap = document.createElement("span");
+          gap.className = "resprite-word-gap";
+          gap.setAttribute("aria-hidden", "true");
+          introText.appendChild(gap);
+        }
+      });
+    };
+
+    const typewriterTimer = setInterval(() => {
+      renderTypewriterResprite(message.slice(0, charIndex + 1));
+      charIndex += 1;
+      if (charIndex >= message.length) {
+        clearInterval(typewriterTimer);
+      }
+    }, 45);
+
+    sheet.onload = () => {
+      const frameSize = sheet.naturalHeight;
+      const frameCount = Math.max(1, Math.round(sheet.naturalWidth / frameSize));
+      let currentFrame = 0;
+
+      sprite.style.backgroundSize = `${frameCount * 100}% 100%`;
+
+      const drawFrame = () => {
+        const xOffset = (currentFrame * 100) / Math.max(1, frameCount - 1);
+        sprite.style.backgroundPosition = `${xOffset}% 0`;
+      };
+
+      drawFrame();
+      setInterval(() => {
+        currentFrame = (currentFrame + 1) % frameCount;
+        drawFrame();
+      }, 700);
+    };
+  </script>
+</body>
+</html>

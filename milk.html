@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milk</title>
+  <link rel="stylesheet" href="Assets/resprite-font.css" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 28px;
+      background: #000;
+    }
+
+    .baby-sprite {
+      width: min(60vw, 360px);
+      aspect-ratio: 1 / 1;
+      background-image: url("Assets/Baby.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      image-rendering: pixelated;
+    }
+
+    .story-text {
+      margin: 0;
+      width: min(86vw, 760px);
+      text-align: center;
+      --resprite-size: clamp(16px, 2.1vw, 24px);
+      --resprite-gap: -1px;
+      --resprite-space-width: 14px;
+    }
+
+    .story-text.resprite-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 8px 0;
+    }
+
+    .resprite-word {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      align-items: flex-end;
+      gap: var(--resprite-gap);
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .resprite-word-gap {
+      width: var(--resprite-space-width);
+      height: var(--resprite-size);
+      flex: 0 0 auto;
+    }
+
+    .resprite-punctuation {
+      display: inline-flex;
+      align-items: flex-end;
+      justify-content: center;
+      width: calc(var(--resprite-size) * 0.42);
+      height: var(--resprite-size);
+      color: #eaf3ff;
+      font-size: calc(var(--resprite-size) * 0.8);
+      line-height: 1;
+    }
+
+    .more-drinks-button {
+      width: min(50vw, 320px);
+      height: auto;
+      display: block;
+      image-rendering: pixelated;
+      cursor: pointer;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+      transition: transform 160ms ease, filter 160ms ease;
+      transform-origin: center;
+    }
+
+    .more-drinks-button:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+    }
+  </style>
+</head>
+<body data-drink-id="milk">
+  <div class="baby-sprite" aria-label="Baby animation"></div>
+  <p id="story-text" class="story-text resprite-text" aria-live="polite"></p>
+  <a href="fridge.html" aria-label="Get more drinks">
+    <img class="more-drinks-button" src="Assets/Moredrink.png" alt="Get more drinks" />
+  </a>
+
+  <script>
+    const sprite = document.querySelector(".baby-sprite");
+    const sheet = new Image();
+    sheet.src = "Assets/Baby.png";
+
+    sheet.onload = () => {
+      const frameSize = sheet.naturalHeight;
+      const frameCount = Math.max(1, Math.round(sheet.naturalWidth / frameSize));
+      let currentFrame = 0;
+
+      sprite.style.backgroundSize = `${frameCount * 100}% 100%`;
+
+      const drawFrame = () => {
+        const xOffset = (currentFrame * 100) / Math.max(1, frameCount - 1);
+        sprite.style.backgroundPosition = `${xOffset}% 0`;
+      };
+
+      drawFrame();
+      setInterval(() => {
+        currentFrame = (currentFrame + 1) % frameCount;
+        drawFrame();
+      }, 700);
+    };
+
+    const storyText = document.querySelector("#story-text");
+    const message = "why do you even own this? anyways this was probably the last time you were truly happy. all you had to do was poop and eat";
+
+    const renderStoryResprite = (text) => {
+      storyText.textContent = "";
+      storyText.setAttribute("aria-label", text.trim());
+
+      const words = text.split(" ");
+      words.forEach((word, wordIndex) => {
+        const wordElement = document.createElement("span");
+        wordElement.className = "resprite-word";
+
+        for (const char of word.toUpperCase()) {
+          if (char >= "A" && char <= "Z") {
+            const letter = document.createElement("img");
+            letter.className = "resprite-letter";
+            letter.src = `Assets/resprite-font/${char}.png`;
+            letter.alt = "";
+            letter.setAttribute("aria-hidden", "true");
+            wordElement.appendChild(letter);
+            continue;
+          }
+
+          if (char.trim() !== "") {
+            const punctuation = document.createElement("span");
+            punctuation.className = "resprite-punctuation";
+            punctuation.textContent = char;
+            punctuation.setAttribute("aria-hidden", "true");
+            wordElement.appendChild(punctuation);
+          }
+        }
+
+        storyText.appendChild(wordElement);
+
+        if (wordIndex < words.length - 1) {
+          const gap = document.createElement("span");
+          gap.className = "resprite-word-gap";
+          gap.setAttribute("aria-hidden", "true");
+          storyText.appendChild(gap);
+        }
+      });
+    };
+
+    renderStoryResprite(message);
+  </script>
+  <script src="Assets/drink-tracker.js"></script>
+</body>
+</html>

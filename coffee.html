@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coffee</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+
+    .more-drinks-button {
+      width: min(50vw, 320px);
+      height: auto;
+      display: block;
+      image-rendering: pixelated;
+      cursor: pointer;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+      transition: transform 160ms ease, filter 160ms ease;
+      transform-origin: center;
+    }
+
+    .more-drinks-button:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+    }
+  </style>
+</head>
+<body data-drink-id="coffee">
+  <a href="fridge.html" aria-label="Get more drinks">
+    <img class="more-drinks-button" src="Assets/Moredrink.png" alt="Get more drinks" />
+  </a>
+  <script src="Assets/drink-tracker.js"></script>
+</body>
+</html>
